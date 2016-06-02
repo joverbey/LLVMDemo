@@ -1,3 +1,7 @@
+*.yy.*
+vlang
+output.*
+
 # Compiled Object files
 *.slo
 *.lo
@@ -12,9 +16,6 @@
 *.so
 *.dylib
 *.dll
-
-# Fortran module files
-*.mod
 
 # Compiled Static libraries
 *.lai
