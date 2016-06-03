@@ -34,7 +34,7 @@ class CodeGen: public Visitor {
   llvm::Value *translateBinOpReal(llvm::Value *lhs, BinOp op, llvm::Value *rhs);
   llvm::Value *translateBinOpInteger(llvm::Value *lhs, BinOp op, llvm::Value *rhs);
   void finalizeComputeFunction();
-  llvm::Function *createMain(llvm::Module *module, llvm::Function *compute);
+  llvm::Function *createMain();
 
   llvm::IRBuilder<> builder;
   llvm::Module *module; /// The LLVM module containing the translation
@@ -198,11 +198,10 @@ void CodeGen::Visit(const IfExpr *node) {
 }
 
 llvm::Module *CodeGen::GetModule() {
-
   if (code.find(root) == code.end()) {
     root->Accept(this);
     finalizeComputeFunction();
-    createMain(module, compute);
+    createMain();
   }
 
   return module;
@@ -213,7 +212,7 @@ void CodeGen::finalizeComputeFunction() {
   verifyFunction(*compute);
 }
 
-llvm::Function *CodeGen::createMain(Module *module, Function *compute) {
+llvm::Function *CodeGen::createMain() {
   Function *output;
   if (compute->getReturnType()->isIntegerTy()) {
     FunctionType *outFuncType = TypeBuilder<void(int), false>::get(getGlobalContext());
